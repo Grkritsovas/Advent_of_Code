@@ -11,3 +11,11 @@ graph TD
     Root --> Year[2025 /]
     Year --> Inputs[inputs /]
     Year --> Script[day01.py]
+```
+### Instructions
+
+setup_inputs.py: Downloads inputs for the year.
+
+utils.py: Shared helpers (input reading, grid parsing, math).
+
+inputs/: Auto-generated folder (ignored by Git).
