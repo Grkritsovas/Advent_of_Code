@@ -1,6 +1,8 @@
-import copy
+import sys
+import os
 
-INPUT_FILE = "inputs/input_04.txt"
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import utils
 
 def count_neighbors(grid, row, col):
     adjacent = 0
@@ -45,11 +47,7 @@ def part_2(grid, n_rows, n_cols):
     return total_removed
 
 if __name__ == '__main__':
-    grid = []
-    with open(INPUT_FILE) as f:
-        for line in f:
-            if line.strip():
-                grid.append(list(line.strip()))
+    grid = utils.read_grid(__file__)
 
     n_rows = len(grid)
     n_cols = len(grid[0])

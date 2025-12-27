@@ -1,27 +1,38 @@
 import re
+import os
 
-# 1. Parsing Numbers only from a string
+def _get_path(calling_script):
+    """Internal helper to resolve input path from script name."""
+    script_dir = os.path.dirname(calling_script)
+    script_name = os.path.basename(calling_script)
+    day_num = script_name.replace("day", "").replace("_", "").replace(".py", "")
+
+    return os.path.join(script_dir, "inputs", f"input_{day_num}.txt")
+
 def extract_ints(text):
-    """
-    Finds all integers in a string. 
-    "Game 1: 3 blue, 4 red" -> [1, 3, 4]
-    """
+    """Return all integers found in a string."""
     return [int(x) for x in re.findall(r'-?\d+', text)]
 
-# 2. Grid Reader
-def read_grid(filename):
+def read_grid(calling_script):
+    """Returns a 2D list of characters from the input file."""
     grid = []
-    with open(filename) as f:
+    with open(_get_path(calling_script)) as f:
         for line in f:
             if line.strip():
                 grid.append(list(line.strip()))
+
     return grid
 
-# 3. Neighbors (4, or 8 with diagonals=True)
+def read_input(calling_script, mode='lines'):
+    """Returns input as list of strings (default) or raw string (mode='raw')."""
+    with open(_get_path(calling_script)) as f:
+        if mode == 'raw':
+            return f.read()
+
+        return [line.strip() for line in f if line.strip()]
+
 def get_neighbors(grid, row, col, diagonals=False):
-    """
-    Returns a list of (r, c) tuples for valid neighbors within bounds.
-    """
+    """Returns valid neighbor coordinates (r, c)."""
     n_rows, n_cols = len(grid), len(grid[0])
     deltas = [(-1, 0), (1, 0), (0, -1), (0, 1)] # Up, Down, Left, Right
     
@@ -33,11 +44,11 @@ def get_neighbors(grid, row, col, diagonals=False):
         neighbor_row, neighbor_col = row + delta_row, col + delta_col
         if 0 <= neighbor_row < n_rows and 0 <= neighbor_col < n_cols:
             results.append((neighbor_row, neighbor_col))
-            
+
     return results
 
-# 4. Prints a grid nicely
 def print_grid(grid):
     for row in grid:
         print("".join(str(x) for x in row))
+
     print()
